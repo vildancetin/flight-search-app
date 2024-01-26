@@ -33,9 +33,9 @@ const FlightsInputs = () => {
     setDepartDest({ ...departDest, [e.target.name]: e.target.value });
     setShowSuggestions({ ...showSuggestions, [e.target.name]: true });
   };
-
+console.log(departDest)
   const handleSelect = (item, type) => {
-    setDepartDest({ ...departDest, [type]: `${item.name},${item.code}` });
+    setDepartDest({ ...departDest, [type]: `${item.code}` });
   };
   const filterDeparture = airports.filter((item) =>
     item.name.toLowerCase().includes(departDest.departure.toLowerCase())
