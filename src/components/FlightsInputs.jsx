@@ -3,14 +3,11 @@ import { Flowbite, Label, TextInput, ToggleSwitch } from "flowbite-react";
 import { Datepicker } from "flowbite-react";
 import { useEffect, useState } from "react";
 
-const FlightsInputs = () => {
+const FlightsInputs = ({departDest,setDepartDest}) => {
   const url = "https://65b124d5d16d31d11bde2f0d.mockapi.io/flights";
-  const [switch2, setSwitch2] = useState(true);
+
   const [airports, setAirpots] = useState([]);
-  const [departDest, setDepartDest] = useState({
-    departure: "",
-    destination: "",
-  });
+
 
   const [showSuggestions, setShowSuggestions] = useState({
     departure: false,
@@ -36,6 +33,8 @@ const FlightsInputs = () => {
 console.log(departDest)
   const handleSelect = (item, type) => {
     setDepartDest({ ...departDest, [type]: `${item.code}` });
+    setShowSuggestions({ ...showSuggestions, [type]: false });
+
   };
   const filterDeparture = airports.filter((item) =>
     item.name.toLowerCase().includes(departDest.departure.toLowerCase())
@@ -124,14 +123,7 @@ console.log(departDest)
           <Datepicker className="w-[500px]" disabled/>
         </div>)}
       </div>
-      <div className="flex justify-center">
-        <button
-          className="p-2 px-6 bg-blue-500 mt-5 rounded-xl text-white text-lg
- hover:bg-opacity-90"
-        >
-          Search
-        </button>
-      </div>
+
     </>
   );
 };
