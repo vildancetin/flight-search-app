@@ -7,12 +7,16 @@ const Home = () => {
   const [departDest, setDepartDest] = useState({
     departure: "",
     destination: "",
+    departureTime:"",
+    destinationTime:""
   });
+  const [way, setWay] = useState(false);
+
   return (
     <div>
         <Navbar/>
-        <FlightsInputs departDest={departDest} setDepartDest={setDepartDest}/>
-        <ListFlights departDest={departDest} setDepartDest={setDepartDest}/>
+        <FlightsInputs departDest={departDest} setDepartDest={setDepartDest} way={way} setWay={setWay}/>
+        <ListFlights departDest={departDest} setDepartDest={setDepartDest} way={way} setWay={setWay}/>
     </div>
   )
 }

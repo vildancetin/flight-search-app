@@ -1,19 +1,18 @@
 import axios from "axios";
 import { Flowbite, Label, TextInput, ToggleSwitch } from "flowbite-react";
 import { Datepicker } from "flowbite-react";
+import { DatepickerViewsDays } from "flowbite-react/lib/esm/components/Datepicker/Views/Days";
 import { useEffect, useState } from "react";
 
-const FlightsInputs = ({departDest,setDepartDest}) => {
+const FlightsInputs = ({ departDest, setDepartDest ,way,setWay}) => {
   const url = "https://65b124d5d16d31d11bde2f0d.mockapi.io/flights";
 
   const [airports, setAirpots] = useState([]);
-
 
   const [showSuggestions, setShowSuggestions] = useState({
     departure: false,
     destination: false,
   });
-  const [way, setWay] = useState(false);
   const getAirports = async () => {
     try {
       const { data } = await axios(url);
@@ -30,11 +29,10 @@ const FlightsInputs = ({departDest,setDepartDest}) => {
     setDepartDest({ ...departDest, [e.target.name]: e.target.value });
     setShowSuggestions({ ...showSuggestions, [e.target.name]: true });
   };
-console.log(departDest)
+  console.log(departDest);
   const handleSelect = (item, type) => {
     setDepartDest({ ...departDest, [type]: `${item.code}` });
     setShowSuggestions({ ...showSuggestions, [type]: false });
-
   };
   const filterDeparture = airports.filter((item) =>
     item.name.toLowerCase().includes(departDest.departure.toLowerCase())
@@ -58,7 +56,9 @@ console.log(departDest)
       </ul>
     );
   };
-
+  const handleChangeDate = (date, name) => {
+    setDepartDest({ ...departDest, [name]: date.toLocaleDateString() });
+  };
   return (
     <>
       <div className="flex gap-4 justify-center">
@@ -88,6 +88,7 @@ console.log(departDest)
             className="w-[500px]"
             onChange={handleChange}
             value={departDest.departure}
+            required
           />
           {showSuggestions.departure && createLi(filterDeparture, "departure")}
         </div>
@@ -102,6 +103,7 @@ console.log(departDest)
             sizing="md"
             className="w-[500px]"
             onChange={handleChange}
+            required
             value={departDest.destination}
           />
           {showSuggestions.destination &&
@@ -111,19 +113,41 @@ console.log(departDest)
       <div className="flex justify-center gap-8">
         <div>
           <Label value="Departure Time" />
-          <Datepicker className="w-[500px]"  />
+          <Datepicker
+            className="w-[500px]"
+            required
+            onSelectedDateChanged={(date) =>
+              handleChangeDate(date, "departureTime")
+            }
+            name="departureTime"
+            value={departDest.departureTime}
+          />
         </div>
         {way ? (
           <div>
             <Label value="Destination Time" />
-            <Datepicker className="w-[500px]"/>
+            <Datepicker
+              className="w-[500px]"
+              required
+              name="destinationTime"
+              value={departDest.destinationTime}
+              onSelectedDateChanged={(date) =>
+                handleChangeDate(date, "destinationTime")
+              }
+            />
           </div>
-        ) : ( <div>
-          <Label value="Destination Time" />
-          <Datepicker className="w-[500px]" disabled/>
-        </div>)}
+        ) : (
+          <div>
+            <Label value="Destination Time" />
+            <Datepicker
+              className="w-[500px]"
+              disabled
+              name="destinationTime"
+              value={departDest.destinationTime}
+            />
+          </div>
+        )}
       </div>
-
     </>
   );
 };
